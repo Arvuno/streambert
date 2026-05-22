@@ -10,6 +10,8 @@ const {
   webContents,
   Notification,
 } = require("electron");
+const fs = require("fs");
+const os = require("os");
 const path = require("path");
 
 // -- RAM / performance flags ---------------------------------------------------
@@ -101,6 +103,29 @@ const BLOCKED_HOSTS = [
 // -- Module-level state --------------------------------------------------------
 let mainWindow = null;
 const getMainWindow = () => mainWindow;
+
+// -- Startup diagnostics (Win10) -----------------------------------------------
+function writeStartupDiagFile(diag) {
+  const userDataPath = app.getPath("userData");
+  const diagPath = path.join(userDataPath, "startup_diag.json");
+  try {
+    fs.writeFileSync(diagPath, JSON.stringify(diag, null, 2), "utf8");
+  } catch (e) {
+    console.error("[boot] Failed to write startup_diag.json:", e.message);
+  }
+}
+
+function getDiagCtx() {
+  return {
+    ts: new Date().toISOString(),
+    os: `${os.platform()} ${os.release()}`,
+    arch: os.arch(),
+    nodeVersion: process.versions.node,
+    electronVersion: process.versions.electron,
+    chromeVersion: process.versions.chrome,
+    appVersion: app.getVersion(),
+  };
+}
 
 const playerWcIds = new Set();
 let sessionsConfigured = false;
@@ -594,7 +619,19 @@ if (!gotTheLock) {
 
   app.whenReady().then(() => {
     _bench("app ready");
-    createWindow();
+    try {
+      createWindow();
+    } catch (err) {
+      const diag = {
+        ...getDiagCtx(),
+        phase: "createWindow",
+        error: err.message,
+        stack: err.stack,
+      };
+      console.error("[boot] createWindow failed:", err.message);
+      writeStartupDiagFile(diag);
+      app.exit(1);
+    }
   });
   app.on("window-all-closed", () => app.quit());
   app.on("activate", () => {
