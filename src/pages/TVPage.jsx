@@ -649,18 +649,27 @@ export default function TVPage({
     setResolvingUrl(true);
     setResolveError(null);
     const epNum = selectedEp.episode_number;
-    const progressKey = `tv_${item.id}_s${selectedSeason}e${epNum}`;
+    // Capture season context at start of async resolution to detect stale callbacks
+    const seasonAtStart = selectedSeason;
+    const progressKey = `tv_${item.id}_s${seasonAtStart}e${epNum}`;
     const startTime = storage.get("dlTime_" + progressKey) || 0;
     let mounted = true;
     window.electron
       .resolveAllManga({
         title,
-        seasonNumber: selectedSeason,
+        seasonNumber: seasonAtStart,
         episodeNumber: epNum,
         translationType: dubMode,
       })
       .then((res) => {
         if (!mounted) return;
+        // Warn if season changed during async resolution (stale closure)
+        if (seasonAtStart !== selectedSeason) {
+          console.warn(
+            `Season context mismatch: resolved for s${seasonAtStart} but now on s${selectedSeason}. Discarding stale result.`,
+          );
+          return;
+        }
         if (res?.ok && res.url) {
           if (res.isDirectMp4 !== undefined) {
             window.electron
@@ -671,6 +680,13 @@ export default function TVPage({
               })
               .then((r) => {
                 if (!mounted) return;
+                // Re-check season context after nested async as well
+                if (seasonAtStart !== selectedSeason) {
+                  console.warn(
+                    `Season context mismatch (nested): resolved for s${seasonAtStart} but now on s${selectedSeason}. Discarding stale result.`,
+                  );
+                  return;
+                }
                 setResolvedPlayerUrl(r.playerUrl);
                 // Also expose raw url so download button can use it
                 setM3u8Url(res.url);
