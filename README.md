@@ -219,3 +219,6 @@ Project Root
         └── useRatings.js
 ```
 </details>
+
+## Contributing
+PRs welcome!
