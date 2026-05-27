@@ -1243,7 +1243,7 @@ export default function TVPage({
             // Videasy resets to 0 on quality change. We only seek back if:
             // - ct is near zero (≤5s)
             // - we were well into the video (>30s)
-            // - the user did NOT manually seek in the last 6s
+            // - the user did NOT mannually seek in the last 6s
             const now = Date.now();
             if (
               lastKnownTimeRef.current > 30 &&

@@ -1629,7 +1629,7 @@ function SubtitleSettingsSection() {
       }
       if (res.timeout) {
         setWyzieError(
-          "No key received within 10 seconds. Try again or enter it manually.",
+          "No key received within 10 seconds. Try again or enter it mannually.",
         );
         setWyzieRedeeming(false);
         return;
@@ -1641,7 +1641,7 @@ function SubtitleSettingsSection() {
         setWyzieError("");
       } else {
         setWyzieError(
-          "Could not extract key automatically. Try entering it manually.",
+          "Could not extract key automatically. Try entering it mannually.",
         );
       }
     } catch (e) {
