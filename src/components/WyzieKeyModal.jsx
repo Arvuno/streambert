@@ -53,7 +53,7 @@ export default function WyzieKeyModal({ onDone, onSkip }) {
         await saveAndFinish(res.key);
       } else {
         setPhase("prompt");
-        setErrorMsg("Could not extract API key. Please copy it manually.");
+        setErrorMsg("Could not extract API key. Please copy it mannually.");
       }
     } catch (e) {
       setPhase("prompt");
@@ -166,7 +166,7 @@ export default function WyzieKeyModal({ onDone, onSkip }) {
                   setErrorMsg("");
                 }}
               >
-                I already have a key — enter manually
+                I already have a key — enter mannually
               </button>
               <button
                 className="btn btn-ghost"
@@ -331,7 +331,7 @@ export default function WyzieKeyModal({ onDone, onSkip }) {
                   setErrorMsg("");
                 }}
               >
-                Enter key manually
+                Enter key mannually
               </button>
               <button
                 className="btn btn-ghost"

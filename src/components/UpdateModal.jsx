@@ -703,7 +703,7 @@ export default function UpdateModal({
               >
                 GitHub releases page
               </a>{" "}
-              to download manually.
+              to download mannually.
             </div>
           )}
 
@@ -773,7 +773,7 @@ export default function UpdateModal({
                     cursor: "pointer",
                   }}
                 >
-                  Download manually ↗
+                  Download mannually ↗
                 </a>
               </span>
             </div>
