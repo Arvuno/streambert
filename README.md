@@ -219,3 +219,5 @@ Project Root
         └── useRatings.js
 ```
 </details>
+
+- Documentation updated for clarity
