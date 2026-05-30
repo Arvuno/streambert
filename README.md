@@ -222,3 +222,6 @@ Project Root
 
 ## Contributing
 PRs welcome!
+
+<!-- Contributor: Arvuno - documentation update -->
+
